@@ -1,0 +1,262 @@
+---
+########################################################################
+# Glycolysys overview.
+########################################################################
+# step           : int
+# enzyme         : str (name)
+# type           : str
+# type_info      : str
+# substrate      : [TODO] ADD THIS.
+# product        : [TODO] ADD THIS.
+# rationale      : str (markdown)
+# thermodynamics :
+#   overall      :
+#     - str (equation)
+#     - int|float|str[???] (Delta G std-prime, kJ/mol)
+#     - int|float|str[???] (Delta G, kJ/mol)
+#   comment      : str (re thermodynamics, markdown)
+# regulation     : str (markdown)
+# comment        : str (markdown)
+- step: 1
+  enzyme: hexokinase
+  type: transferase
+  type_info: Transfers P from ATP to glucose because direct phosphorylation of glucose is thermodynamically unfavorable. (Kinases that use ATP require Mg+; interacts with [negatively charged] ATP to stabilize it and allows for nucleophilic attack of the glucose onto 3P of ATP.)
+  rationale: | # markdown
+    - Phosphorylation of glucose traps glucose in the cell.
+    - First step of glycolysis but NOT first committed step for glycolysis.
+    - Conformational change to hexokinase when glucose binds ...
+        1. Forms a binding pocket for ATP and the active site.
+        2. Excludes water from the active site.
+        3. Brings ATP and glucose in close proximity to one another.
+  thermodynamics:
+    1: 
+        - glucose + Pi -> G6P + H2O
+        - 14
+        - 20
+    2: 
+        - ATP + H2O -> ADP + Pi
+        - -35.5
+        - -54.8
+    overall: 
+        - Glucose + ATP -> G6P + ADP
+        - -16.5
+        - -34.8
+  regulation: | # markdown
+    - Very highly thermodynamically favorable reaction; tf, must be regulated.
+    - Use of G6P also must be regulated bc it is a branch point ... G6P:
+        - Glycogen
+        - Fructose 6P (glycolysis)
+        - Pentose P Pathway (NADPH)
+    - Product inhibition: hexokinase is inhibited by G6P (ie, the reaction product).
+    - Inactivation of hexokinase makes it so glucose cannot diffuse into the cell (glucose travels into the cell via facilitated diffusion). By phosphorylating glucose [Gluc] goes down and [Gluc-P] goes up in the cell, increasing diffusion of glucose into the cell [by creating a chemical gradient].
+  comment: First use of ATP.
+
+- step: 2
+  enzyme: phosphoglucose isomerase (PGI)
+  type: isomerase
+  rationale: | # markdown
+    Must perform an isomeration because:
+    
+    - In the next step, phosphofructokinase phosphorylates C1; it is much easier to phosphorylate C1 of fructose than glucose.
+    - The next step is an aldolase cleavage, which requires the carbonyl group to be on C2 of the 6 C sugar. Otherwise, we wouldn't get two 3C molecules (instead, would yield one 4C and one 2C); ie, this allows for cleavage into 2 symmetric molecules.
+  thermodynamics:
+    overall:
+        - G6P <=> F6P
+        - 2
+        - -2
+    comment: readily reversible (can participate in glycolysis AND gluconeogenesis)
+  regulation: none
+
+- step: 3
+  enzyme: phosphofructokinase (PFK1)
+  type: transferase
+  type_info: | # markdown
+    - Transfers P from ATP to glucose bc the transfer of P to glucose is thermodynamically unfavorable. [???]
+    - Attaches 2nd phosphate to fructose.
+  rationale: | # markdown
+    Main control point for glycolysis; **rate determining step** => rate at which PFK catalyzes its rxn determines rate of entire pathway.
+    First *committed* step of glycolysis.
+  thermodynamics:
+    1: 
+        - F6P + Pi -> F-1,6-BP + H2O
+        - 16
+        - 36
+    2: 
+        - ATP + H2O -> ADP + Pi
+        - -30.5
+        - -18.8
+    overall:
+        - F6P + ATP -> F-1,6-BP + ADP
+  regulation: | # markdown
+    - Very highly thermodynamically favorable rxn; tf, must be regulated.
+    - Main control point for glycolysis => rate determining step.
+    - Allosteric enzyme:
+        - Positive effectors
+            - AMP/ADP
+            - F-2,6-BP
+        - Negative effectors
+            - ATP
+            - Citrate (first product of TCA cycle)
+    - Controlled by "energy charge":
+        - ATP (-ve), AMP/ADP (+ve) are allosteric effectors.
+        - Catabolic pathway => ATP regenerating pathway (goal is to make ATP)
+    - Fructose 2,6-bisphosphate (F-2,6-BP) is a secondary metabolite that is synthesized just to regulate PFK (and F-1,6-BP); tf, it regulates both glycolysis and gluconeogenesis.
+        - Positive regulator (activates glucose breakdown in glycolysis), bc [gluc] is high ... need to process it.
+        - F-2,6-BP is formed from PFK2 (PFK1 phosphorylates C1 of fructose; PFK2 phosphorylates C2 of fructose).
+    - Conditions
+        - High [gluc] activates glycolysis and inhibits gluconeogenesis.
+        - PFK2 dephosphorylated is a kinase: F6P -> F-2,6-BP
+        - High [gluc] => high [F6P]: some of [pathway intermediate] is convert to regulator.
+        - Low [gluc] inhibits glycolysis and activates gluconeogensis.
+        - PFK2 phosphorylated is a phosphatase and remove Pi from F-2,6-BP (H2O -> Pi).
+  comment: Second use of ATP.
+
+- step: 4
+  enzyme: aldolase
+  type: lyase
+  type_info: cleaves single bond to form new double bond (=O).
+  rationale: | # markdown
+    - Re: Phosphoglucose isomerase ... C=O must be at C2 bc need to cleave into 2 symmetric molecules.
+  thermodynamics:
+    overall:
+        - F-1,6-BP <=> GAP + DHAP
+        - 24
+        - 0
+    comment: |
+        Near equilibrium in cell, [GAP] are kept low so rxn is pushed in foreward direction.
+  regulation: none
+
+- step: 5
+  enzyme: triose phosphate isomerase (TIM)
+  type: isomerase
+  rationale: Converts DHAP to GAP.
+  thermodynamics:
+    overall:
+        - DHAP <=> GAP
+        - 7.5
+        - 0
+    comment: Near equilibrium in cell, [GAP] is low, so reaction favors formation of GAP from DHAP.
+  regulation: none
+  comment: | # markdown
+    Last step in stage 1 of glycolysis.
+
+- step: 6
+  enzyme: glyceraldehyde-3P dehydrogenase (GAPDH)
+  type: oxidoreductase
+  type_info: NAD+ (oxidized) -> NADH (reduced)
+  rationale: | # markdown
+    - Generate a high energy phosphate compound (1,3-BPG) to transfer a Pi to ADP (later).
+    - Converts GAP to 1,3-BPG.
+    - 1,3-BPG = first *high energy* compound
+    - Uses NAD+ as cofactor, generating NADH (reduction). *This is also an energy capture step*; energy goes into electron transport chain (ETC).
+    - Incorporates Pi into new compound; difficult to do alone, must use add'l energy from oxidation.
+    - Acylphosphates = high energy compounds used to phosphorylate ADP -> ATP.
+  thermodynamics:
+    1: 
+        - GAP + NAD+ <=> 3PG + NADH + H+
+        - -41.3
+    2:
+        - 3PG + Pi <=> 1,3-BPG + H2O
+        - 49.4
+    overall:
+        - GAP + NAD+ + Pi <=> 1,3-BPG + NADH + H+
+        - 6.3
+        - 0
+    comment: This (overall) reaction is ~at equilibrium bc it is coupled with the next reaction (step 7).
+  regulation: none
+  comment: | # markdown
+    - First step in Stage 2 of glycolysis.
+    - Here, 1,3-BPG is created.
+    - 2,3-BPG is negative hemoglobin regulator made from 1,3-BPG.
+    - Within RBCs, there is a phosphoglycerate mutase that converts 1,3-BPG to 2,3-BPG (another enzyme converts 2,3-BPG to 3BPG [???] as necessary to regulated hemoglobin).
+    - Tf, [2,3-BPG] in RBCs depends on glycolysis.
+    - Glycolysis deficiencies affect O2 delivery:
+        - Hexokinase deficiency (beginning of glycolysis) => decrease [2,3-BPG] => increase O2 binding.
+        - Pyruvate kinase deficiency (end of glycolysis) => increase [1,3-BPG] => increase [2,3-BPG] => decrease O2 binding.
+
+- step: 7
+  enzyme: phosphyglycerate kinase (PGK)
+  type:
+  rationale: | # markdown
+    - Formation of 1st ATP.
+    - Takes acyl phosphate group off of 1,3-BPG, transfers it to ADP.
+    - Substrate level phosphorylation (individual enzyme uses a substrate to phosphorylate ADP to ATP).
+    - For every 1 glucose molecule, we get 2 molecules of 1,3-BPG, so this "step" generates 2 ATP (bc it happens once for each 1,3-BPG).
+  thermodynamics:
+    overall:
+        - 1,3-BPG + ADP <=> 3PG + ATP
+        - -18.8
+    comment: |
+        GAPDH and PGK work together by *substrate channeling*.
+        These enzymes are physically associated with each other; GAPDH rxn is overall unfavorable, PGK favorable.
+        The end product of GAPDH is immediately passed to PGK; combined rxn occurs more quickly; "extra" energy from PGK is "donated" to GAPDH, enabling GAPDH to proceed forward.
+
+        1. GAP + NAD+ + Pi       <=> 1,3-BPG + NADH + H+    (GAPDH)
+        2. 1,3-BPG + ADP         <=> 3PG + ATP              (PGK)
+        3. GAP + NAD+ + ADP + Pi <=> 3PGA + ATP + NADH + H+ (overall)
+  regulation: none
+  comment: Unregulated bc needs to pass some energy to GAPDH (previous enzyme) and phosphoglycerate mutase (next enzyme).
+
+- step: 8
+  enzyme: phosphoglycertae mutase (PGM)
+  type: isomerase (mutase)
+  type_info: Mutase => migration of functional group.
+  rationale: | # markdown
+    - Must convert to 2PG in order to create PEP.
+    - PGM has phosphorylated histidine in the active site, which is transferred to C2 of 3PG to create 2PG. [TODO] Need to clarify this ... the histidine transfers the function group, the histidine is not itself transferred.
+  thermodynamics:
+    overall:
+        - 3PG <=> 2PG
+        - 5
+        - 0
+    comment: Also coupled to PGK to help it to equilibrium.
+  regulation: none
+
+- step: 9
+  enzyme: enolase
+  type: lyase
+  type_info: removes water to form double bond.
+  rationale: | # markdown
+    - Creates 2nd high energy compound (phosphoenolpyruvate, PEP).
+  thermodynamics:
+    overall:
+        - 2PG <=> PEP
+        - 2
+        - -2
+  regulation: none
+
+- step: 10
+  enzyme: pyruvate kinase (PK)
+  type: 
+  rationale: | # markdown
+    - Take phosphate off of PEP and add it to ADP (ADP -> ATP).
+  thermodynamics:
+    1: 
+        - PEP + H2O -> Pyruvate + Pi
+        - -61.9
+    2:
+        - Pi + ADP -> ATP + H2O
+        - -30.5
+    overall:
+        - PEP + ADP -> Pyruvate + ATP
+        - -31.4
+        - -16.7
+    comment: | # markdown
+        Hydrolysis of Pi off of PEP only gives -16 kJ/mol of energy, but pyruvate is tautomerized from enol to keto forms, providing add'l -46 kJ/mol for total of -61.9 kJ/mol.
+  regulation: | # markdown
+    - Secondary control point (end of glycolysis)
+    - Responds to rate of TCA cycle and ETC.
+    - Allosteric enzyme:
+        - Positive effectors
+            - AMP
+            - ADP
+            - F-1,6-BP (If increase [F-1,6-BP], then phosphofructokinase is active but this shows that the cell is NOT running glycolysi; tf, F-1,6-BP activates PK, pushing (pulling?) glycolysis forward.
+        - Negative effectors
+            - ATP
+            - Acetyl CoA (from pyruvate dehydrogenase in TCA)
+            - NADH (main product of TCA)
+    - Controlled by energy charge (like PFK); ATP (-ve) and AMP/ADP (+ve) are allosteric effectors.
+  comment: | # markdown
+    - End of glycolysis (and, tf, end of stage 2).
+
+...
